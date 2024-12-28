@@ -19,6 +19,9 @@ Route::prefix('v1')->group(function () {
 
     // Protected routes
     Route::middleware('auth:sanctum')->group(function () {
+        // Log Out user
+        Route::post('/logout', [UserController::class, 'logout']);
+
         // Role management
         Route::apiResource('roles', RoleController::class);
 
