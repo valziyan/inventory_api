@@ -59,6 +59,17 @@ class UserController extends Controller
     }
 
     /**
+     * Handle user logout
+     */
+    public function logout(Request $request)
+    {
+        // Revoke the user's current token
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Successfully logged out'], 200);
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
