@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('subscriptions', function (Blueprint $table) {
-            $table->integer('inventory_limit')->default(5); // Default limit
+            $table->dropColumn('inventory_limit');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('subscriptions', function (Blueprint $table) {
-            $table->dropColumn('inventory_limit');
+            $table->integer('inventory_limit')->default(5); // Add back with a default value
         });
     }
 };

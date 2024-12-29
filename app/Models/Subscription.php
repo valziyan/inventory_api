@@ -11,14 +11,18 @@ class Subscription extends Model
 
     protected $fillable = [
         'name',
-        'start_date',
-        'expiry_date',
-        'status',
-        'inventory_limit',
+        'type'
     ];
 
-    public function inventories()
+    public function userSubscriptions()
     {
-        return $this->hasMany(Inventory::class);
+        return $this->hasMany(UserSubscription::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_subscriptions')
+                    ->withPivot('start_date', 'expiry_date', 'status')
+                    ->withTimestamps();
     }
 }

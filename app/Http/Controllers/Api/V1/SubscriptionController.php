@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subscription;
+use App\Models\UserSubscription;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -19,10 +20,7 @@ class SubscriptionController extends Controller
         // Validate the request
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'expiry_date' => 'required|date|after:start_date',
-            'status' => 'required|in:active,inactive',
-            'inventory_limit' => 'required|integer|min:1',
+            'type' => 'required|in:monthly,yearly', // Validate type
         ]);
 
         // Create subscription
@@ -42,10 +40,7 @@ class SubscriptionController extends Controller
         // Validate the request
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
-            'start_date' => 'sometimes|date',
-            'expiry_date' => 'sometimes|date|after:start_date',
-            'status' => 'sometimes|in:active,inactive',
-            'inventory_limit' => 'sometimes|integer|min:1',
+            'type' => 'sometimes|in:monthly,yearly',
         ]);
 
         // Update subscription
@@ -60,5 +55,30 @@ class SubscriptionController extends Controller
         $subscription->delete();
 
         return response()->json(['message' => 'Subscription deleted successfully'], 200);
+    }
+
+    public function assignToUser(Request $request)
+    {
+        // Validate request
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'subscription_id' => 'required|exists:subscriptions,id',
+            'start_date' => 'required|date',
+            'expiry_date' => 'required|date|after:start_date',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        // Assign subscription to user
+        $userSubscription = UserSubscription::create($validated);
+
+        return response()->json($userSubscription, 201);
+    }
+
+    public function userSubscriptions($userId)
+    {
+        // Get subscriptions for a user
+        $subscriptions = UserSubscription::where('user_id', $userId)->with('subscription')->get();
+
+        return response()->json($subscriptions, 200);
     }
 }
