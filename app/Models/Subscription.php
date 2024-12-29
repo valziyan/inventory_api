@@ -9,7 +9,13 @@ class Subscription extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'inventory_limit', 'start_date', 'expiry_date', 'status'];
+    protected $fillable = [
+        'name',
+        'start_date',
+        'expiry_date',
+        'status',
+        'inventory_limit',
+    ];
 
     public function inventories()
     {
