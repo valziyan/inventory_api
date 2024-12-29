@@ -27,13 +27,17 @@ Route::prefix('v1')->group(function () {
 
         // User management
         Route::apiResource('users', UserController::class);
+            // Additional user routes
+            Route::get('/users/{userId}/subscriptions', [SubscriptionController::class, 'userSubscriptions']);
 
         // Inventory management
         Route::apiResource('inventories', InventoryController::class);
 
         // Subscription management
         Route::apiResource('subscriptions', SubscriptionController::class);
-
+            // Additional subscription routes
+            Route::post('/subscriptions/assign', [SubscriptionController::class, 'assignToUser']);
+            
         // Transaction management
         Route::apiResource('transactions', TransactionController::class);
 

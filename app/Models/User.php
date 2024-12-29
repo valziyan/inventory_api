@@ -57,4 +57,16 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Inventory::class, 'user_inventories');
     }
+
+    public function userSubscriptions()
+    {
+        return $this->hasMany(UserSubscription::class);
+    }
+
+    public function subscriptions()
+    {
+        return $this->belongsToMany(Subscription::class, 'user_subscriptions')
+                    ->withPivot('start_date', 'expiry_date', 'status')
+                    ->withTimestamps();
+    }
 }
