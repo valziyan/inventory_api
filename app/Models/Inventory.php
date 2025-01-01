@@ -9,16 +9,16 @@ class Inventory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'type', 'description', 'subscription_id'];
-
-    public function subscription()
-    {
-        return $this->belongsTo(Subscription::class);
-    }
+    protected $fillable = [
+        'name', 
+        'type', 
+        'description', 
+        'user_id',
+    ];
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_inventories');
+        return $this->belongsTo(User::class);
     }
 
 }
